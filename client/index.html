@@ -30,6 +30,23 @@
                 return false
             });
 
+            $("#connect").click(function() {
+                var ip = $('#clientIp').val();
+                var port = $('#clientPort').val();
+
+                conn = new WebSocket('ws://'+ip+':'+port+'/ws')
+
+                //conn = new WebSocket("ws://10.8.189.4:8189/ws");
+                conn.onclose = function(evt) {
+                    appendLog($("<div><b>Connection Closed.</b></div>"))
+                }
+                conn.onmessage = function(evt) {
+                    appendLog($("<div/>").text(evt.data))
+                }
+
+            });
+
+            /*
             if (window["WebSocket"]) {
                 conn = new WebSocket("ws://10.8.189.4:8189/ws");
                 conn.onclose = function(evt) {
@@ -40,7 +57,7 @@
                 }
             } else {
                 appendLog($("<div><b>WebSockets Not Support.</b></div>"))
-            }
+            }*/
         });
     </script>
     <style type="text/css">
@@ -84,6 +101,10 @@
 <body>
 <div id="log"></div>
 <form id="form">
+    <input type="text" id="clientIp" size="64"/>
+    <input type="text" id="clientPort" size="64"/>
+    <input type="button" id="connect" value="连接" />
+    <br>
     <input type="submit" value="发送" />
     <input type="text" id="msg" size="64"/>
 </form>

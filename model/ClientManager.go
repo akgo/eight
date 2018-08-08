@@ -32,6 +32,12 @@ func (manager * ClientManager) Start () {
 		case conn := <-manager.Register:
 			manager.Clients[conn] = true
 			jsonMessage,_ := json.Marshal(&Message{Content: "/A new sockets has connected"})
+
+			//提示连接成功
+			welcomeMessage,_ := json.Marshal(&Message{Content: "connect success"})
+			conn.Send <- welcomeMessage
+
+			//广播给所有连接者
 			manager.Send(jsonMessage,conn)
 		case conn := <-manager.Unregister:
 			if _,ok := manager.Clients[conn]; ok {
@@ -49,7 +55,7 @@ func (manager * ClientManager) Start () {
 			if modelManage.isBind(m.Content) {
 				modelManage.Exec(m.Content,[]reflect.Value{})
 			}
-		
+
 			for conn := range manager.Clients {
 				select {
 				case conn.Send <- message :

@@ -34,11 +34,11 @@ func main () {
 	go manager.Start()
 
 	//client
-	http.HandleFunc("/", home)
+	http.HandleFunc("/", Home)
 
 	http.HandleFunc("/ws",wsPage)
 
-	http.HandleFunc("/client", htmlServer)
+	http.HandleFunc("/client", HtmlServer)
 
 	http.ListenAndServe(cfg.Section("server").Key("websocket_sercer_ip").String() + ":" + cfg.Section("server").Key("webscoket_port").String(),nil)
 
@@ -59,11 +59,11 @@ func wsPage(res http.ResponseWriter, req *http.Request) {
 
 }
 
-func home(w http.ResponseWriter, r *http.Request) {
+func Home(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, "home server!")
 }
 
-func htmlServer(w http.ResponseWriter, r *http.Request) {
+func HtmlServer(w http.ResponseWriter, r *http.Request) {
 	wd, _ := os.Getwd()
 	wd = wd + "/client"
 	fmt.Println(wd)
